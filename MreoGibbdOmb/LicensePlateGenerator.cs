@@ -34,7 +34,7 @@ namespace MreoGibbdOmb
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"https://unbelievaboat.com/api/v1/guilds/1141836586259071028/users/{command.User.Id}"),
+                RequestUri = new Uri($"https://unbelievaboat.com/api/v1/guilds/1071781069130563645/users/{command.User.Id}"),
                 Headers =
             {
             { "accept", "application/json" },
