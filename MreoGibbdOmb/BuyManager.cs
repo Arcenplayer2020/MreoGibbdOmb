@@ -12,7 +12,7 @@ namespace MreoGibbdOmb
 {
     internal class BuyManager
     {
-        internal static async Task MessageHandler(SocketMessage message)
+        internal static  Task MessageHandler(SocketMessage message)
         {
             //int money;
           
@@ -27,6 +27,7 @@ namespace MreoGibbdOmb
                 {
                     LicensePlateGenerator.AddPlayerToList(message.Author);
                 }
+                return Task.CompletedTask;
 
             }
         }
