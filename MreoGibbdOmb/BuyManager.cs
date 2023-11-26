@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
@@ -30,6 +31,29 @@ namespace MreoGibbdOmb
                 return Task.CompletedTask;
 
             }
+
+        internal static async Task Withdraw(SocketSlashCommand command)
+        {
+            int money = 0;
+            if (command.Data.Options.Count == 0)
+            {
+                money = await HTTPRequester.GetBalance(DiscordBot.Client.CurrentUser);
+                
+            }
+            else
+            {
+                money = Convert.ToInt32(command.Data.Options.First().Value);
+                int userBalance = await HTTPRequester.GetBalance(DiscordBot.Client.CurrentUser);
+                if (money >= userBalance)
+                {
+                    await command.RespondAsync("у вас нет денег");
+                    return;
+                }
+                
+            }
+            await HTTPRequester.TransferMoney(DiscordBot.Client.CurrentUser,command.User,money);
+            await command.RespondAsync("деньги успешно выведены");
         }
     }
+}
 

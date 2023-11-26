@@ -10,6 +10,7 @@ namespace MreoGibbdOmb
 {
     internal class LicensePlateGenerator
     {
+        const int LicensePlatePrice = 4000; 
         static public List<SocketUser> PayingUsers = new List<SocketUser>();
         static public List<SocketUser>UsersWhoCanBuy = new List<SocketUser>();
         private static readonly List<char> chars = new List<char>
@@ -30,49 +31,16 @@ namespace MreoGibbdOmb
         };
         internal static async Task SendLicensePlate(SocketSlashCommand command)
         {
-            HttpClient client = new HttpClient();
-            var request = new HttpRequestMessage
+            int playerBalance = await HTTPRequester.GetBalance(command.User);
+            if (playerBalance >= LicensePlatePrice)
             {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri($"https://unbelievaboat.com/api/v1/guilds/1071781069130563645/users/{command.User.Id}"),
-                Headers =
-            {
-            { "accept", "application/json" },
-            { "Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiIxMTc3NTc3NTQwMTU2NTI2MzgyIiwiaWF0IjoxNzAwODI4NzQyfQ.O7_cw10NJfQQgHLU-n9X-WHTkHGUUkWx8pgQybMQNi4" },
-                },
-            };
-            using (var response = await client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
-                JObject json = JObject.Parse(body);
-                int money = (int)json["cash"]!;
-                if (money >= 4000 && !UsersWhoCanBuy.Contains(command.User))
-                {
-                    UsersWhoCanBuy.Add(command.User);
-                    await command.RespondAsync("оплатите, и заново используйте команду");
-
-                }
-                if (command.Data.Options.Count == 2)
-                {
-                    if (PayingUsers.Contains(command.User))
-                    {
-                        await GetRandomLicensePlate(command);
-                        PayingUsers.Remove(command.User);
-                        UsersWhoCanBuy.Remove(command.User);
-                    }
-                    
-                    else if(!PayingUsers.Contains(command.User) && !UsersWhoCanBuy.Contains(command.User))
-                    {
-                        await command.RespondAsync("вы не оплатили", ephemeral: true);
-                    }
-                }
+                await HTTPRequester.TransferMoney(command.User,DiscordBot.Client.CurrentUser,LicensePlatePrice);
+                await command.RespondAsync($"Ваш  номерной знак: {GenerateLicensePlate()}");
             }
-        }
-        private static async Task GetRandomLicensePlate(SocketSlashCommand command)
-        {
-
-            await command.RespondAsync($"Ваш номерной знак: {GenerateLicensePlate()}");
+            else
+            {
+                await command.RespondAsync("у вас нет денег");
+            }
         }
 
         private static string GenerateLicensePlate()

@@ -19,15 +19,21 @@ namespace MreoGibbdOmb
             BuyLicensePlateCommand.WithDescription("Покупка н-з");
             BuyLicensePlateCommand.AddOption("марка", ApplicationCommandOptionType.String, "Марка машины",true);
             BuyLicensePlateCommand.AddOption("модель", ApplicationCommandOptionType.String, "Модель машины",true);
-            BuyLicensePlateCommand.AddOption("номер", ApplicationCommandOptionType.String, "С буквами А, В, Е, К, М, Н, О, Р, С, Т, У и Х. Как X000XX ", false);
-            BuyLicensePlateCommand.AddOption("регион", ApplicationCommandOptionType.String, "Регион Номера",false);
+            //BuyLicensePlateCommand.AddOption("номер", ApplicationCommandOptionType.String, "С буквами А, В, Е, К, М, Н, О, Р, С, Т, У и Х. Как X000XX ", false);
+            //BuyLicensePlateCommand.AddOption("регион", ApplicationCommandOptionType.String, "Регион Номера",false);
 
+            var WithdrawCommand = new SlashCommandBuilder()
+                .WithName("withdraw")
+                .WithDescription("выводит средства")
+                .AddOption("количество",ApplicationCommandOptionType.Number,"выводит деньги, оставьте пустым если хотите вывести все",isRequired: false)
+                .WithDefaultMemberPermissions(GuildPermission.Administrator);
 
 
 
             try
             {
                 await DiscordBot.Client.CreateGlobalApplicationCommandAsync(BuyLicensePlateCommand.Build());
+                await DiscordBot.Client.CreateGlobalApplicationCommandAsync(WithdrawCommand.Build());
             }
             catch (HttpException exception)
             {
@@ -43,6 +49,10 @@ namespace MreoGibbdOmb
                 if (command.CommandName == "buy-license-plate")
                 {
                     await LicensePlateGenerator.SendLicensePlate(command);
+                }
+                else if (command.CommandName == "withdraw")
+                {
+                    await BuyManager.Withdraw(command);
                 }
             });
             return Task.CompletedTask;
