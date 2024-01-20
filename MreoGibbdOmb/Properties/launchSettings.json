@@ -2,9 +2,7 @@
   "profiles": {
     "MreoGibbdOmb": {
       "commandName": "Project",
-      "environmentVariables": {
-        "token": "MTE3NzM0MDE2OTk5MzU5NzA4OA.G8af1Z.BBMC0hGyfZlQfcXlyaSKkz2ThEvMnnbhsxQ10M"
-      }
+      "remoteDebugEnabled": true
     }
   }
 }

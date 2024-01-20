@@ -18,7 +18,7 @@ namespace MreoGibbdOmb
             await Task.Delay(Timeout.Infinite);
         }
 
-        private Task ClientReady()
+        private  Task ClientReady()
         {
             _ = Task.Run(async () =>
             {

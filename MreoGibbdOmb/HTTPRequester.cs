@@ -11,8 +11,10 @@ namespace MreoGibbdOmb
 {
     internal class HTTPRequester
     {
+        const string token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiIxMTc3OTkyMzY0OTE3MTI5OTI4IiwiaWF0IjoxNzAwOTI1NjY1fQ.PlHLyFpBJ7UafkUws8kcVClmm-pijTynC3CQOdSHwdw";
         public static async Task<int> GetBalance(SocketUser user)
         {
+            
             HttpClient client = new HttpClient();
             var request = new HttpRequestMessage
             {
@@ -21,7 +23,7 @@ namespace MreoGibbdOmb
                 Headers =
                 {
                     { "accept", "application/json" },
-                    { "Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiIxMTc3OTkyMzY0OTE3MTI5OTI4IiwiaWF0IjoxNzAwOTI1NjY1fQ.PlHLyFpBJ7UafkUws8kcVClmm-pijTynC3CQOdSHwdw" },
+                    { "Authorization", token },
                 },
             };
             using (var response = await client.SendAsync(request))
@@ -51,7 +53,7 @@ namespace MreoGibbdOmb
                 Headers =
                 {
                     { "accept", "application/json" },
-                    { "Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiIxMTc3OTkyMzY0OTE3MTI5OTI4IiwiaWF0IjoxNzAwOTI1NjY1fQ.PlHLyFpBJ7UafkUws8kcVClmm-pijTynC3CQOdSHwdw" },
+                    { "Authorization", token },
                 },
                 Content = new StringContent("{\"cash\":" + $"{money}" + "}")
                 {
